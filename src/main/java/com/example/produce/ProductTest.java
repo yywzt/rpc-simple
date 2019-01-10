@@ -18,7 +18,7 @@ public class ProductTest implements Runnable{
         try {
             ServerSocketChannel channel = ServerSocketChannel.open();
             channel.bind(new InetSocketAddress("127.0.0.1",9090));
-//            channel.configureBlocking(false);//切换成非阻塞模式
+            channel.configureBlocking(false);//切换成非阻塞模式
 
             ByteBuffer readBuffer = ByteBuffer.allocate(1024);
             ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
@@ -26,15 +26,21 @@ public class ProductTest implements Runnable{
             while (true){
                 SocketChannel socketChannel = channel.accept();
                 if(socketChannel != null){
-                    readBuffer.clear();
-                    int read = socketChannel.read(readBuffer);
-                    System.out.println("readBuffer: " + new String(readBuffer.array()));
-                    //相关操作
-                    writeBuffer.clear();
-                    writeBuffer.put("response".getBytes());
-                    writeBuffer.flip();
-                    int write = socketChannel.write(writeBuffer);
-                    System.out.println("writeBuffer: " + new String(writeBuffer.array()));
+                    try {
+                        readBuffer.clear();
+                        int read = socketChannel.read(readBuffer);
+                        System.out.println("readBuffer: " + new String(readBuffer.array()));
+                        //相关操作
+                        writeBuffer.clear();
+                        writeBuffer.put("response".getBytes());
+                        writeBuffer.flip();
+                        int write = socketChannel.write(writeBuffer);
+                        System.out.println("writeBuffer: " + new String(writeBuffer.array()));
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }finally {
+                        socketChannel.close();
+                    }
                 }
             }
         } catch (IOException e) {

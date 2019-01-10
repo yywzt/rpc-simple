@@ -20,7 +20,7 @@ public class ConsumeTest implements Runnable{
 //            socketChannel.configureBlocking(false);//非阻塞模式
             socketChannel.connect(new InetSocketAddress("127.0.0.1",9090));
 
-//            while(!socketChannel.finishConnect()) {
+//            while(! socketChannel.finishConnect() ) {
                 ByteBuffer readBuffer = ByteBuffer.allocate(1024);
                 ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
 
